@@ -1,63 +1,63 @@
-var alphabetChoices = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-
-var wins = 0;
-var losses = 0;
-var guesses = 9;
-var guessesLeft = 9;
-var guessedLetters = [];
-var letterToGuess = null;
-
+var alphabetChoices = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+ 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+ ];
 
 
 var computerGuess = alphabetChoices[Math.floor(Math.random() * alphabetChoices.length)];
+console.log(computerGuess);
 
-
-//var updateGuessesLeft = function() {
- 
-  //document.getElementById('guessesLeft').innerHTML = "Guesses left: " + guessesLeft;
-//};
-
-var updateLetterToGuess = function() {
-  this.letterToGuess = this.alphabetChoices[Math.floor(Math.random() * this.alphabetChoices.length)];
-};
-var updateGuessesSoFar = function() {
- 
-  document.getElementById('let').innerHTML = "Your Guesses so far: " + guessedLetters.join(', ');
-};
-
-var reset = function() {
-  totalGuesses = 9;
-  guessesLeft = 9;
-  guessedLetters = [];
-
-  updateLetterToGuess();
-  updateGuessesLeft();
-  updateGuessesSoFar();
-}
-
-updateLetterToGuess();
-//updateGuessesLeft();
-
-
+var wins = 0;
+var losses = 0;
+var guessesLeft = 9;
+var guessedLetters = [];
+// var letterToGuess = null;
 
 document.onkeyup = function(event) {
-    guessesLeft--;
-  var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+  if (event.key === computerGuess) {
+    winGame();
+    console.log("You guessed correctly!");
+  } else {
+    letterGuess(event.key);
+    document.getElementById("guessesLeft").innerHTML = "Guesses left:" + guessesLeft;
+    if(guessesLeft === 0){
+      loseGame();
+    }
+  }
 
-  guessedLetters.push(userGuess);
- // updateGuessesLeft();
-  updateGuessesSoFar();
-
-        if (guessesLeft > 0){
-            if (userGuess == letterToGuess){
-                wins++;
-                document.getElementById('wins').innerHTML = "Wins: " + wins;
-                reset();
-            }
-        }else if(guessesLeft === 0){
-           
-            losses++;
-            document.getElementById('losses').innerHTML = "Losses: " + losses;
-            reset();
-        }
 };
+
+// checked letterGuess functoin
+function letterGuess(letter){
+  if (guessedLetters.indexOf(letter) === -1) {
+    guessedLetters.push(letter);
+    guessesLeft--;
+    document.getElementById('let').innerHTML = "Your Guesses so far: " + guessedLetters.join(', ');
+  } else {
+        // document.getElementById('guessesLeft').innerHTML = "Guesses left: " + guessesLeft;
+    // document.getElementById('let').innerHTML = "Your Guesses so far: " + guessedLetters.join(', ');
+    // alert("You've already guessed this letter");
+  }
+}
+
+// win game function
+function winGame(){
+  // alert("You Win, You must be Psychic!");
+  wins++;
+  document.getElementById("wins").innerHTML = "Wins: " + wins;
+  
+  restartGame ();
+}
+// lose game function
+function loseGame(){
+  losses++;
+  document.getElementById("losses").innerHTML = "Losses: " + losses;
+  console.log("Sorry, you are not Psychic");
+  restartGame();
+}
+// new game / restart function
+function restartGame(){
+  guessesLeft = 9;
+  guessedLetters = [];
+  computerGuess = alphabetChoices[Math.floor(Math.random() * alphabetChoices.length)];
+  console.log(computerGuess);
+}
